@@ -50,6 +50,14 @@ Now to test that the tracker is working, run:
 cd build
 ./test_tracking ../test.tm ../gtFolder
 
+RUN Release
+cd C:\CamC3DDev\Carm3DProject\build_dev\DHeld_PrecisionTracking\Release
+test_tracking.exe \colorTestFolder\test.tm \gtFolder
+
+RUN Debug
+cd C:\CamC3DDev\Carm3DProject\build_dev\DHeld_PrecisionTracking\Debug
+test_tracking.exe \colorTestFolder\test.tm \gtFolder
+
 This will execute a test script which will run 5 different versions of the tracker on the test data.  Each version has a different speed / accuracy tradeoff, as explained in the print statements that will appear on your screen.
 
 If you are using ROS, then you can use CMakeLists.txt.ros (just rename this as CMakeLists.txt) and package.xml to compile the tracker.
