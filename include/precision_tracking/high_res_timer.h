@@ -7,9 +7,10 @@
  *
  */
 
+
 #ifndef __PRECISION_TRACKING__HIGH_RES_TIMER_H
 #define __PRECISION_TRACKING__HIGH_RES_TIMER_H
-
+/*
 #include <time.h>
 #include <string>
 #include <sstream>
@@ -65,5 +66,5 @@ public:
 };
 
 } // namespace precision_tracking
-
+*/
 #endif // __PRECISION_TRACKING__HIGH_RES_TIMER_H

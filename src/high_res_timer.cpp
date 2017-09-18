@@ -5,7 +5,7 @@
  *
  */
 
-
+/*
 #include <precision_tracking/high_res_timer.h>
 
 namespace precision_tracking {
@@ -130,3 +130,4 @@ ScopedTimer::~ScopedTimer()
 }
 
 } // namespace precision_tracking
+*/

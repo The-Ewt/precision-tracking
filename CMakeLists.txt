@@ -1,19 +1,34 @@
 cmake_minimum_required(VERSION 2.8)
-project(precision_tracking)
+project(DHeld_PrecisionTracking)
 
 if (NOT CMAKE_BUILD_TYPE)
     message(STATUS "No build type selected, default to Release")
     set(CMAKE_BUILD_TYPE "Release")
 endif()
 
+### Find modules from ThirdParty prepared by Keisuke
+set(CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/cmake ${CMAKE_MODULE_PATH})
+
 find_package(Boost REQUIRED thread signals)
-find_package(Eigen REQUIRED)
+
+# Eigen
+find_package(Eigen3 REQUIRED)
+if(EIGEN3_INCLUDE_DIR)
+    include_directories(${EIGEN3_INCLUDE_DIR})
+endif(EIGEN3_INCLUDE_DIR)
+#find_package(Eigen REQUIRED)
+
+# Add PCL
+IF(WIN32)
+    set(PCL_DIR "${IMFUSION_EXT}/PCL/cmake")
+ENDIF(WIN32)
 find_package(PCL REQUIRED COMPONENTS common kdtree io)
+add_definitions(${PCL_DEFINITIONS})
 
 include_directories (include ${EIGEN_INCLUDE_DIRS} ${PCL_INCLUDE_DIRS})
 
 add_definitions(${EIGEN_DEFINITIONS})
-add_definitions(${PCL_DEFINITIONS})
+
 
 find_package(OpenMP)
 if (OPENMP_FOUND)

@@ -270,7 +270,7 @@ double LF_RGBD_6D_Evaluator::getPointProbability(
        sensor_horizontal_resolution, sensor_vertical_resolution,
        num_current_points);
 
-  get_log_prob(point);
+  return get_log_prob(point);
 }
 
 double LF_RGBD_6D_Evaluator::get_log_prob(const pcl::PointXYZRGB& current_pt)
@@ -338,10 +338,10 @@ double LF_RGBD_6D_Evaluator::computeColorProb(const pcl::PointXYZRGB& prev_pt,
   }
 
   // Compute the probability of the match, using the spatial and color distance.
-  const double color_distance1 = fabs(color1 - color2);
+  const double color_distance1 = fabs(double(color1 - color2));
   double point_match_prob;
   if (params_->kTwoColors) {
-    const double color_distance2 = fabs(color3 - color4);
+    const double color_distance2 = fabs(double(color3 - color4));
 
     point_match_prob =
         point_match_prob_spatial_i *

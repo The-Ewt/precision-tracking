@@ -8,6 +8,7 @@
 
 #include <string>
 #include <cstdio>
+#include <stdio.h>  /* defines FILENAME_MAX */
 #include <sstream>
 
 #include <boost/math/constants/constants.hpp>
@@ -15,8 +16,17 @@
 
 #include <precision_tracking/track_manager_color.h>
 #include <precision_tracking/tracker.h>
-#include <precision_tracking/high_res_timer.h>
+//#include <precision_tracking/high_res_timer.h>
 #include <precision_tracking/sensor_specs.h>
+
+//#ifdef WINDOWS
+#include <direct.h>
+#define GetCurrentDir _getcwd
+//#endif
+
+
+#define CLOCK_REALTIME
+#define CLOCK_PROCESS_CPUTIME_ID
 
 using std::string;
 
@@ -236,10 +246,10 @@ void track(
 
   std::ostringstream hrt_title_stream;
   hrt_title_stream << "Total time for tracking " << tracks.size() << " objects";
-  precision_tracking::HighResTimer hrt(hrt_title_stream.str(),
-                                       do_parallel ? CLOCK_REALTIME :
-                                                     CLOCK_PROCESS_CPUTIME_ID);
-  hrt.start();
+ // precision_tracking::HighResTimer hrt(hrt_title_stream.str(),
+ //                                      do_parallel ? CLOCK_REALTIME :
+ //                                                    CLOCK_PROCESS_CPUTIME_ID);
+ // hrt.start();
 
   // Iterate over all tracks.
   #pragma omp parallel for num_threads(num_threads)
@@ -289,11 +299,11 @@ void track(
     (*velocity_estimates)[i] = track_estimates;
   }
 
-  hrt.stop();
-  hrt.print();
+  //hrt.stop();
+  //hrt.print();
 
-  const double ms = hrt.getMilliseconds();
-  printf("Mean runtime per frame: %lf ms\n", ms / total_num_frames);
+  //const double ms = hrt.getMilliseconds();
+  //printf("Mean runtime per frame: %lf ms\n", ms / total_num_frames);
 }
 
 void trackAndEvaluate(
@@ -370,6 +380,13 @@ void testPrecisionTrackerColor(
   trackAndEvaluate(track_manager, gt_folder, params, true, false);
 }
 
+string ExePath() {
+	char buffer[MAX_PATH];
+	GetModuleFileName(NULL, buffer, MAX_PATH);
+	string::size_type pos = string(buffer).find_last_of("\\/");
+	return string(buffer).substr(0, pos);
+}
+
 int main(int argc, char **argv)
 {
   if (argc < 3) {
@@ -377,12 +394,20 @@ int main(int argc, char **argv)
     return (1);
   }
 
-  string color_tm_file = argv[1];
-  string gt_folder = argv[2];
+  string sCurrentPath = ExePath();
+  //std::vector<string> cCurretPath(sCurrentPath->begin(), sCurrentPath->end());
+  //cCurretPath.push_back('\0');
+  //printf("Current working directory: \n%s\n", cCurrentPath);
 
+  std::cout << "my directory is " << ExePath() << "\n";
+
+  string color_tm_file = sCurrentPath + argv[1];
+  string gt_folder = sCurrentPath + argv[2];
+
+  
   // Load tracks.
   printf("Loading file: %s\n", color_tm_file.c_str());
-  precision_tracking::track_manager_color::TrackManagerColor track_manager(color_tm_file);
+  precision_tracking::track_manager_color::TrackManagerColor track_manager( color_tm_file);
   printf("Found %zu tracks\n", track_manager.tracks_.size());
 
   // Track objects and evaluate the accuracy.
