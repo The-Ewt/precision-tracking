@@ -10,8 +10,12 @@
 
 #ifndef __PRECISION_TRACKING__HIGH_RES_TIMER_H
 #define __PRECISION_TRACKING__HIGH_RES_TIMER_H
-/*
+
 #include <time.h>
+
+#include "opencv2/opencv.hpp"
+#include <Eigen/Dense>
+
 #include <string>
 #include <sstream>
 #include <cstddef>
@@ -26,8 +30,11 @@ class HighResTimer {
 public:
   std::string description_;
 
-  HighResTimer(const std::string& description = "HighResTimer",
-               const clockid_t& clock = CLOCK_PROCESS_CPUTIME_ID);
+ // HighResTimer(const std::string& description = "HighResTimer",
+  //             const clockid_t& clock = CLOCK_PROCESS_CPUTIME_ID);
+
+  HighResTimer(const std::string& description = "HighResTimer");
+
   void start();
   void stop();
   void reset(const std::string& description);
@@ -52,9 +59,12 @@ public:
 
 private:
   double total_us_;
-  timespec start_;
-  timespec end_;
-  clockid_t clock_;
+  //timespec start_;
+  //timespec end_;
+  long long start_;
+  long long end_;
+  double frequency;
+  //clockid_t clock_;
 };
 
 class ScopedTimer
@@ -66,5 +76,5 @@ public:
 };
 
 } // namespace precision_tracking
-*/
+
 #endif // __PRECISION_TRACKING__HIGH_RES_TIMER_H

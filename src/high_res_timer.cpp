@@ -5,28 +5,28 @@
  *
  */
 
-/*
+
 #include <precision_tracking/high_res_timer.h>
 
 namespace precision_tracking {
 
-HighResTimer::HighResTimer(const std::string& description,
-                           const clockid_t& clock)
+HighResTimer::HighResTimer(const std::string& description)
   : description_(description),
     total_us_(0),
-    clock_(clock)
+    start_(0),
+	end_(0)
 {
+	frequency = cv::getTickFrequency();
 }
 
 void HighResTimer::start()
 {
-  clock_gettime(clock_, &start_);
+	start_ = end_ = cv::getTickCount();
 }
 
 void HighResTimer::stop()
 {
-  clock_gettime(clock_, &end_);
-  total_us_ += 1e6 * (end_.tv_sec - start_.tv_sec) + 1e-3 * (end_.tv_nsec - start_.tv_nsec);
+	end_ = cv::getTickCount();
 }
 
 void HighResTimer::reset(const std::string& description)
@@ -130,4 +130,3 @@ ScopedTimer::~ScopedTimer()
 }
 
 } // namespace precision_tracking
-*/

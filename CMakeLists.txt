@@ -6,6 +6,8 @@ if (NOT CMAKE_BUILD_TYPE)
     set(CMAKE_BUILD_TYPE "Release")
 endif()
 
+set (IMFUSION_EXT "$ENV{IMFUSION_EXT}" CACHE PATH "ImFusion Externals")
+
 ### Find modules from ThirdParty prepared by Keisuke
 set(CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/cmake ${CMAKE_MODULE_PATH})
 
@@ -25,7 +27,7 @@ ENDIF(WIN32)
 find_package(PCL REQUIRED COMPONENTS common kdtree io)
 add_definitions(${PCL_DEFINITIONS})
 
-include_directories (include ${EIGEN_INCLUDE_DIRS} ${PCL_INCLUDE_DIRS})
+include_directories (include ${EIGEN_INCLUDE_DIRS} ${PCL_INCLUDE_DIRS} ${OpenCV_INCLUDE_DIRS})
 
 add_definitions(${EIGEN_DEFINITIONS})
 
@@ -38,6 +40,9 @@ if (OPENMP_FOUND)
 endif()
 
 add_library (${PROJECT_NAME}
+
+  
+  
   src/adh_tracker3d.cpp
   src/alignment_evaluator.cpp
   src/density_grid_2d_evaluator.cpp
@@ -69,6 +74,10 @@ add_library (${PROJECT_NAME}
 )
 
 add_executable (test_tracking test_tracking.cpp)
-target_link_libraries(${PROJECT_NAME} ${EIGEN_LIBRARIES} ${PCL_LIBRARIES})
+target_link_libraries(
+	${PROJECT_NAME} 
+	${EIGEN_LIBRARIES} 
+	${PCL_LIBRARIES} 
+	${OpenCV_LIBS})
 target_link_libraries (test_tracking ${PROJECT_NAME})
 

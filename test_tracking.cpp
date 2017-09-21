@@ -16,7 +16,7 @@
 
 #include <precision_tracking/track_manager_color.h>
 #include <precision_tracking/tracker.h>
-//#include <precision_tracking/high_res_timer.h>
+#include <precision_tracking/high_res_timer.h>
 #include <precision_tracking/sensor_specs.h>
 
 //#ifdef WINDOWS
@@ -246,10 +246,8 @@ void track(
 
   std::ostringstream hrt_title_stream;
   hrt_title_stream << "Total time for tracking " << tracks.size() << " objects";
- // precision_tracking::HighResTimer hrt(hrt_title_stream.str(),
- //                                      do_parallel ? CLOCK_REALTIME :
- //                                                    CLOCK_PROCESS_CPUTIME_ID);
- // hrt.start();
+  precision_tracking::HighResTimer hrt(hrt_title_stream.str());
+  hrt.start();
 
   // Iterate over all tracks.
   #pragma omp parallel for num_threads(num_threads)
@@ -299,11 +297,11 @@ void track(
     (*velocity_estimates)[i] = track_estimates;
   }
 
-  //hrt.stop();
-  //hrt.print();
+  hrt.stop();
+  hrt.print();
 
-  //const double ms = hrt.getMilliseconds();
-  //printf("Mean runtime per frame: %lf ms\n", ms / total_num_frames);
+  const double ms = hrt.getMilliseconds();
+  printf("Mean runtime per frame: %lf ms\n", ms / total_num_frames);
 }
 
 void trackAndEvaluate(
